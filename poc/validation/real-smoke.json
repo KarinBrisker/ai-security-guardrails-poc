@@ -1,0 +1,108 @@
+{
+  "model_load_ms": 12601.697291946039,
+  "first_request": {
+    "decision": "ALLOW",
+    "reasons": [],
+    "mode": "full",
+    "boundary": "input",
+    "source": "user",
+    "sensitive_action": false,
+    "required_risks": [
+      "toxicity"
+    ],
+    "thresholds_validated": false,
+    "security_validated": false,
+    "findings": [],
+    "detectors": {
+      "leakage": {
+        "backend": "rules",
+        "status": "complete",
+        "score": 0.0,
+        "scope": "configured_synthetic_secret_only",
+        "rule_text_coverage": 1.0
+      },
+      "toxicity": {
+        "backend": "real",
+        "identity": "textdetox/bert-multilingual-toxicity-classifier:8fe5526e9c6b69cf1a615104a2ad037fb266c670:fp32:raw-v1:512:64:1a02e50129409b1363681ff1c4e645d21f6091f6410aac15b5fec8755e22977f:cc55f9d51076794f7c44b1a0a56dd9c72714bb4a46f4ec6b92a1b407dcd5e449",
+        "status": "complete",
+        "score": 0.004117721691727638,
+        "total_windows": 1,
+        "selected_windows": 1,
+        "scored_windows": 1,
+        "skipped_windows": 0,
+        "token_coverage": 1.0,
+        "cache_hits": 0,
+        "flagged_windows": []
+      },
+      "injection": {
+        "backend": "unavailable",
+        "identity": "unavailable:injection",
+        "status": "unavailable",
+        "score": null,
+        "total_windows": null,
+        "selected_windows": 0,
+        "scored_windows": 0,
+        "skipped_windows": null,
+        "token_coverage": null,
+        "cache_hits": 0,
+        "flagged_windows": [],
+        "error": "Local prompt_guard model is absent; run explicit model setup"
+      }
+    },
+    "elapsed_ms": 527.244875091128,
+    "deadline_exceeded": false
+  },
+  "cached_request": {
+    "decision": "ALLOW",
+    "reasons": [],
+    "mode": "full",
+    "boundary": "input",
+    "source": "user",
+    "sensitive_action": false,
+    "required_risks": [
+      "toxicity"
+    ],
+    "thresholds_validated": false,
+    "security_validated": false,
+    "findings": [],
+    "detectors": {
+      "leakage": {
+        "backend": "rules",
+        "status": "complete",
+        "score": 0.0,
+        "scope": "configured_synthetic_secret_only",
+        "rule_text_coverage": 1.0
+      },
+      "toxicity": {
+        "backend": "real",
+        "identity": "textdetox/bert-multilingual-toxicity-classifier:8fe5526e9c6b69cf1a615104a2ad037fb266c670:fp32:raw-v1:512:64:1a02e50129409b1363681ff1c4e645d21f6091f6410aac15b5fec8755e22977f:cc55f9d51076794f7c44b1a0a56dd9c72714bb4a46f4ec6b92a1b407dcd5e449",
+        "status": "complete",
+        "score": 0.004117721691727638,
+        "total_windows": 1,
+        "selected_windows": 1,
+        "scored_windows": 1,
+        "skipped_windows": 0,
+        "token_coverage": 1.0,
+        "cache_hits": 1,
+        "flagged_windows": []
+      },
+      "injection": {
+        "backend": "unavailable",
+        "identity": "unavailable:injection",
+        "status": "unavailable",
+        "score": null,
+        "total_windows": null,
+        "selected_windows": 0,
+        "scored_windows": 0,
+        "skipped_windows": null,
+        "token_coverage": null,
+        "cache_hits": 0,
+        "flagged_windows": [],
+        "error": "Local prompt_guard model is absent; run explicit model setup"
+      }
+    },
+    "elapsed_ms": 0.19066594541072845,
+    "deadline_exceeded": false
+  },
+  "efficacy_evaluation": false
+}

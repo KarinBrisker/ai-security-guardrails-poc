@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "edge-guard-poc"
+version = "0.1.0"
+description = "Explicit two-layer edge text guardrail research demonstrator"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+ml = ["torch>=2.6,<3", "transformers>=4.57,<5", "huggingface-hub>=0.34,<1", "sentencepiece>=0.2,<1"]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+edge-guard = "edge_guard.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/edge_guard"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
