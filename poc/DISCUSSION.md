@@ -18,3 +18,7 @@ The manager, security researcher, and data scientist reviewed the research scope
 The user selected a real accessible toxicity model with an explicit mock pathway. Prompt Guard integration remains an adapter for locally provisioned gated artifacts; access is not assumed.
 
 Proposed default thresholds and runtime caps are demonstration controls, not validated operating points or deployment recommendations. Tests of scheduler and policy behavior are distinct from detector-quality evaluation.
+
+## Task 3 review
+
+The same specialists exchanged critiques of the evaluation plan. They agreed to stage real toxicity/secret evaluation before unavailable injection/joint evaluation; separate risk labels from expected policy outcomes; retain all attempted documents in recall/FPR denominators while reporting unassessed coverage; and distinguish automatic completion from completion after review. The manager also required a future unguarded agent baseline with identical tool authorization, so protection is not mistakenly attributed to the scanner. Threshold sweeps and workflow replay are proposed evaluation components, not features already implemented. Zero observed false positives require rare-event confidence bounds rather than a zero-width bootstrap interval. These decisions are incorporated in the standalone and combined Task 3 plans.

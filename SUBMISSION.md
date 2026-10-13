@@ -78,36 +78,36 @@ The saved [validation artifacts](poc/validation/) distinguish offline behavioral
 
 These checks establish execution and policy behavior; they do not measure recall, false positives, calibration, multilingual detection quality, or deployment performance. See [design details](poc/DESIGN.md) and [the specialist discussion](poc/DISCUSSION.md).
 
-# Task 3 — Evaluation Plan
+# Task 3 — Evaluation Strategy and Trade-offs
 
-The evaluation should determine whether the two-layer guardrail detects supported risks with acceptable false positives and coverage while reducing CPU cost. The POC's fixtures and smoke tests establish control flow and model execution only; they provide no measured detector efficacy, calibration, or multilingual reliability.
+**Goal:** Measure detection quality, multilingual/adversarial reliability, and CPU cost without mistaking abstention for security. Existing tests and smoke runs establish execution, not efficacy. This is a proposed evaluation; no quality results are claimed.
 
-## Methodology
+## Methodology and comparisons
 
-Build a versioned corpus with separate injection, toxicity, and selected-secret labels; source provenance, interception boundary, language, and attack family; and adjudicated document/workflow outcomes. Injection labels concern malicious instruction redirection, not merely imperative wording. Toxicity is a limited unsafe-content category; selected-secret results must not be generalized to arbitrary confidential data. Use native English, Hebrew, and Arabic examples plus code-switching and translations, reviewed by competent annotators. Include disagreements and label uncertainty rather than turning model predictions into ground truth.
+- **Stage 1:** Evaluate real TextDetox toxicity detection and configured-secret boundary behavior. Assess injection rules as cues separately. Rules-only toxicity is unsupported; real injection and joint efficacy await Prompt Guard weights. Agent replay requires a future harness.
+- **Ground truth:** Version documents with risk, language, attack family, provenance, and interception boundary. Native-language reviewers adjudicate content/attack labels separately from expected policy disposition: toxic quotations can be toxicity-positive yet legitimate moderation input. Record ambiguity and disagreements.
+- **Data:** Use native English, Hebrew, Arabic, and code-switched text, plus reviewed translations. Include legitimate instructions, security quotations, and representative benign traffic. Separate realistic-prevalence and adversarial sets. Group originals/translations/paraphrases before development/validation/test splitting; hold out attack families. Pretraining exposure remains possible.
+- **Baselines:** Compare rules-only, full-ML, rules+full-ML, and rules+selective-ML by supported risk. Predeclare rules-only injection flags as matched cues. Full-ML must scan every window with sufficient reference budget; evaluate deployment caps separately. Never substitute mocks for quality measurements.
+- **Thresholds:** A proposed offline score-analysis harness selects thresholds on validation data targeting ≤1% document-level FPR. The current POC uses fixed 0.5 thresholds. Freeze models, rules, aggregation, thresholds, and coverage policy for paired routing comparisons; vary only routing/budget and declared sampling seeds. Report achieved held-out FPR. Evaluate INT8 separately later.
 
-Include representative benign traffic, legitimate instructions, quoted attack explanations, security discussions, and toxic material quoted for moderation. Construct adversarial documents varying length, payload position, chunk boundaries, paraphrases, Unicode, encoding, distributed instructions, cue-free goal hijacking, and benign rule-hit flooding. Evaluate unsupported encodings/categories explicitly; the current POC does not decode arbitrary encodings.
+## Effectiveness and operational utility
 
-Group original documents, translations, and paraphrased variants before development/validation/test splitting. Hold out attack families and preserve a final untouched test set. Development tunes rules and pipeline behavior, not model weights. Record freshly authored examples and source provenance; these splits do not rule out pretrained-model exposure. Maintain distinct representative-prevalence and adversarial stress sets; a balanced attack corpus alone does not estimate operational alert burden.
-
-Compare four baselines on identical documents and workflows: rules only, full ML, rules plus full ML, and rules plus selective ML. Predeclare rules-only cue positives for detector metrics separately from operational escalation. Use real, pinned models for detector-quality comparisons. Full ML means every tokenizer-specific window; ensure caps permit that baseline or report the document outside supported coverage. Do not compare selective scans against a silently truncated baseline.
-
-Choose detector/policy thresholds on validation data at the provisional ≤1% document-level FPR target. For routing ablations, freeze models, rules, thresholds, aggregation, and coverage policy; vary only routing/sampling. Repeat selective routing with declared seeds. The held-out test reports achieved FPR rather than assuming the target was met. Evaluate INT8 versus full precision separately after establishing the real-model baseline.
-
-## Metrics and acceptance
-
-| Decision | Metrics and interpretation |
+| Metric | Definition and interpretation |
 |---|---|
-| Detection quality | Document-level precision, recall, FPR, and confusion matrices by risk/language, document length, and attack family; precision-recall curves where useful. Report detector and final-policy outcomes separately. |
-| Uncertainty | Confidence intervals for achieved FPR and paired full-versus-selective recall loss. Resample independent document/workflow groups, not overlapping windows or translations. Insufficient benign sample counts cannot establish a low FPR, even with zero observed false positives. |
-| Coverage and usefulness | Per-detector windows/unique tokens scanned, unavailable/unsupported cases, timeout and escalation rates, false blocks, and task completion. Escalation is an explicit third outcome, not counted as successful attack detection or harmless passage. |
-| Agent protection | Replay benign/malicious workflows across input, tool-call, tool-result, and output boundaries. Independently judge attacker-objective success, unauthorized actions, prevented outgoing synthetic-secret export, legitimate-task completion, and review burden. Tool authorization remains independent. |
-| Runtime and resources | On declared CPU/OS/thread settings, measure cold startup separately from warm end-to-end p50/p95 scan latency, peak RAM, inference calls, cache hits, ML windows, and token coverage. Include long documents, repeated agent content, cache misses, caps, and deadline overruns. Use repeated representative runs; a single smoke duration is not a percentile or SLA. |
+| Detection recall / FPR | Per risk: flagged positives / all attempted risk-positive documents; flagged negatives / all attempted risk-negative documents. Define ML flags by threshold and rules-only flags by the declared cue definition. Report precision at representative prevalence. |
+| Coverage | Count flagged, complete nonflagged, and unassessed outcomes. Partial positive scans count as flags; partial/missing nonflags remain unassessed, never true negatives. Report windows, unique-token coverage, and escalation alongside FPR; skipping inspection can reduce apparent false positives. |
+| Policy utility | False blocks / all legitimate attempts; automatic completion / all legitimate attempts. Report escalation and review-assisted completion separately under fixed review handling, including review time/cost. |
+| Uncertainty | Use 95% exact binomial intervals on independent documents for rare FPR, including zero observed false positives; paired group-bootstrap intervals for recall loss. Resample original document/workflow groups, not correlated windows/translations. |
+| Agent protection | Future guarded versus unguarded replay with identical agent settings and tool authorization: attacker-objective success, unauthorized actions, outgoing-secret export, and legitimate-task completion. ESCALATE is pending/interrupted work, not demonstrated attack resolution. |
 
-Predeclare acceptable recall loss, latency/RAM budgets, and task-completion degradation before test inspection. Adopt selective routing only if paired recall-loss confidence bounds pass, budgets hold, cost decreases, and utility remains acceptable. If evidence is insufficient or target-language performance fails, require fuller scanning, increase the declared budget, or narrow supported scope.
+## Robustness and multilingual support
 
-## Expected challenges and failure analysis
+Report metrics by risk, language, code-switching, boundary, attack family, and length; separate native from translated examples. Test injections at beginning/middle/end and across windows; paraphrases, Unicode/encoding, distributed instructions, cue-free goal hijacking, and suspicious-decoy flooding. Include benign lookalikes. Mark unsupported encodings/categories explicitly. Inspect per-language calibration; scores are not validated probabilities.
 
-Model scores are not calibrated probabilities; language-specific score distributions and increasing window counts can change document FPR. Report calibration diagnostics without implying an unvalidated score means a probability. Translation leakage, ambiguous malicious intent, and realistic prevalence complicate evaluation. Sampling introduces variability and can miss attacks; adversaries may consume routing budgets. Preserve examples of misses and false blocks with risk/language/boundary context and model/version metadata.
+## Performance and acceptance
 
-Test missing models, malformed configuration, over-limit documents, cooperative deadline overruns, and partial coverage separately from efficacy. Operational ALLOW must not arise from required missing/mock/incomplete checks. Laptop CPU results do not establish mobile feasibility; validate each additional deployment target independently.
+On named hardware with pinned models, CPU/OS/thread settings, measure cold startup separately from repeated warm end-to-end p50/p95 latency, peak RAM, inference calls, cache hits, and coverage. Include cache misses/reuse, long documents, input/window caps, missing models, errors, and cooperative deadline overruns. Preserve configurations and per-run outputs. Single smoke durations are not percentile estimates or SLAs; laptop results do not establish mobile feasibility.
+
+Predeclare recall-loss tolerance, latency/RAM budgets, and acceptable completion/review burden. Adopt selective routing only if paired recall-loss bounds pass, cost decreases, and utility remains acceptable. Nonflagged partial coverage for required risks escalates unless another check blocks; scan-time savings alone cannot justify adoption. Otherwise increase coverage/budget or narrow supported scope.
+
+Method references: [exact binomial intervals](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats._result_classes.BinomTestResult.proportion_ci.html); [AgentDojo workflow evaluation](https://arxiv.org/abs/2406.13352).
