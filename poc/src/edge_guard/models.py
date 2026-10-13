@@ -8,13 +8,15 @@ import json
 import math
 from pathlib import Path
 import re
+import unicodedata
 
 
 MODEL_IDS = {
     "toxicity": "textdetox/bert-multilingual-toxicity-classifier",
-    "injection": "meta-llama/Llama-Prompt-Guard-2-86M",
+    "injection": "deepset/deberta-v3-base-injection",
 }
-MODEL_DIRS = {"toxicity": "textdetox", "injection": "prompt_guard"}
+PROMPT_GUARD_ID = "meta-llama/Llama-Prompt-Guard-2-86M"
+MODEL_DIRS = {"toxicity": "textdetox", "injection": "deepset_injection"}
 
 
 @dataclass(frozen=True)
@@ -80,11 +82,12 @@ class MockDetector:
 class HFDetector:
     backend = "real"
 
-    def __init__(self, risk: str, directory: Path, revision: str = "local-unpinned"):
+    def __init__(self, risk: str, directory: Path, revision: str = "local-unpinned", model_id: str | None = None):
         import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         self.risk = risk
+        self.model_id = model_id or MODEL_IDS[risk]
         self._torch = torch
         self.tokenizer = AutoTokenizer.from_pretrained(
             str(directory), use_fast=True, local_files_only=True, trust_remote_code=False,
@@ -106,17 +109,26 @@ class HFDetector:
             self.positive_id = 1
         elif risk == "injection":
             mapping = {int(k): str(v).upper() for k, v in self.model.config.id2label.items()}
-            positive = [k for k, v in mapping.items() if v == "MALICIOUS"]
+            positive_label = "MALICIOUS" if self.model_id == PROMPT_GUARD_ID else "INJECTION"
+            negative_label = "BENIGN" if self.model_id == PROMPT_GUARD_ID else "LEGIT"
+            positive = [k for k, v in mapping.items() if v == positive_label]
             if len(positive) != 1 or positive[0] not in (0, 1):
-                raise ValueError("Prompt Guard configuration must identify MALICIOUS polarity")
+                raise ValueError(f"Injection configuration must identify {positive_label} polarity")
+            if mapping.get(1 - positive[0]) != negative_label:
+                raise ValueError(f"Injection configuration must identify {negative_label} polarity")
             self.positive_id = positive[0]
         else:
             raise ValueError(f"Unknown risk: {risk}")
         config_digest = hashlib.sha256(json.dumps(self.model.config.to_dict(), sort_keys=True).encode()).hexdigest()
         tokenizer_digest = hashlib.sha256(self.tokenizer.backend_tokenizer.to_str().encode()).hexdigest()
-        self.identity = f"{MODEL_IDS[risk]}:{revision}:fp32:raw-v1:512:64:{config_digest}:{tokenizer_digest}"
+        self.identity = f"{self.model_id}:{revision}:fp32:raw-v1:512:64:{config_digest}:{tokenizer_digest}"
 
     def windows(self, text: str) -> list[Window]:
+        if self.risk == "injection" and self.model_id == MODEL_IDS["injection"]:
+            # Conservative script gate, not language identification. The model
+            # card lists English/German; non-Latin inputs cannot justify ALLOW.
+            if any(c.isalpha() and "LATIN" not in unicodedata.name(c, "") for c in text):
+                raise DetectorUnavailable("unsupported_script: deepset injection candidate covers English/German only")
         if not text.strip():
             return []
         encoded = self.tokenizer(
@@ -134,6 +146,8 @@ class HFDetector:
             start, end = min(pair[0] for pair in raw_offsets), max(pair[1] for pair in raw_offsets)
             result.append(Window(len(result), text[start:end], start, end, tuple(ids), tuple(range(base, base + count))))
             base += count - 64
+        if not result:
+            raise ValueError("Nonblank input produced no content tokens; detection is unassessed")
         return result
 
     def score(self, window: Window) -> float:
@@ -164,19 +178,26 @@ def build_detectors(backend: str, model_root: str | Path) -> dict:
             manifest = {}
     result = {}
     for risk, subdir in MODEL_DIRS.items():
+        entry = manifest.get(risk, {})
+        model_id = entry.get("repo_id", MODEL_IDS[risk])
+        if risk == "injection" and model_id == PROMPT_GUARD_ID:
+            subdir = "prompt_guard"
+        elif model_id != MODEL_IDS[risk]:
+            result[risk] = UnavailableDetector(risk, "Unsupported model identity in local manifest")
+            continue
         directory = root / subdir
         if not directory.is_dir():
             result[risk] = UnavailableDetector(risk, f"Local {subdir} model is absent; run explicit model setup")
             continue
         try:
-            revision = manifest.get(risk, {}).get("revision", "local-unpinned")
-            result[risk] = HFDetector(risk, directory, revision)
+            revision = entry.get("revision", "local-unpinned")
+            result[risk] = HFDetector(risk, directory, revision, model_id)
         except Exception as exc:
             result[risk] = UnavailableDetector(risk, f"Local classifier load failed: {type(exc).__name__}: {exc}")
     return result
 
 
-def provision_models(model_root: str | Path, include_prompt_guard: bool = False) -> dict:
+def provision_models(model_root: str | Path, include_prompt_guard: bool = False, include_injection: bool = False) -> dict:
     """Explicit online setup; resolve immutable commits before downloading."""
     from huggingface_hub import HfApi, snapshot_download
 
@@ -184,17 +205,18 @@ def provision_models(model_root: str | Path, include_prompt_guard: bool = False)
     root.mkdir(parents=True, exist_ok=True)
     manifest_path = root / "manifest.json"
     manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
-    risks = ["toxicity", "injection"] if include_prompt_guard else ["toxicity"]
+    risks = ["toxicity", "injection"] if include_prompt_guard or include_injection else ["toxicity"]
     for risk in risks:
-        repo_id = MODEL_IDS[risk]
+        repo_id = PROMPT_GUARD_ID if risk == "injection" and include_prompt_guard else MODEL_IDS[risk]
+        subdir = "prompt_guard" if repo_id == PROMPT_GUARD_ID else MODEL_DIRS[risk]
         revision = HfApi().model_info(repo_id, revision="main").sha
         if not revision:
             raise RuntimeError(f"No resolved revision for {repo_id}")
         snapshot_download(
-            repo_id=repo_id, revision=revision, local_dir=str(root / MODEL_DIRS[risk]),
+            repo_id=repo_id, revision=revision, local_dir=str(root / subdir),
             allow_patterns=["*.json", "*.safetensors", "*.model", "*.txt"],
         )
-        manifest[risk] = {"repo_id": repo_id, "revision": revision, "directory": MODEL_DIRS[risk]}
+        manifest[risk] = {"repo_id": repo_id, "revision": revision, "directory": subdir}
         temporary = root / "manifest.json.tmp"
         temporary.write_text(json.dumps(manifest, indent=2) + "\n")
         temporary.replace(manifest_path)

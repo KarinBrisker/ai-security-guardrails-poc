@@ -1,6 +1,6 @@
 # AI security guardrails: home exercise
 
-An offline CPU text-scanning POC with rule-based cues, real pretrained toxicity detection, an optional injection-model adapter, and explicit routing/coverage policy.
+An offline CPU text-scanning POC with rule-based cues, real pretrained injection and toxicity detection, a contextual injection-blocking rule, and explicit routing/coverage policy.
 
 **[Read the complete submission covering Tasks 1, 2, and 3](SUBMISSION.md).**
 
@@ -8,6 +8,8 @@ An offline CPU text-scanning POC with rule-based cues, real pretrained toxicity 
 - [Design and trade-offs](poc/DESIGN.md)
 - [Specialist discussion](poc/DISCUSSION.md)
 - [Persisted execution checks](poc/validation/)
+- [Correctness and completeness audit](VERIFICATION.md)
+- [Best-practice and literature alignment](LITERATURE_ALIGNMENT.md)
 
 ## Quick start
 
@@ -20,12 +22,12 @@ uv run edge-guard demo
 uv run pytest
 ```
 
-The demo uses explicitly labelled fixture-only mocks. To run real CPU toxicity detection:
+The demo uses explicitly labelled fixture-only mocks. To run both real CPU classifiers:
 
 ```sh
 uv sync --extra ml --extra test
-uv run edge-guard provision --model textdetox --models-dir .models
+uv run edge-guard provision --model all --models-dir .models
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 uv run edge-guard smoke --models-dir .models
 ```
 
-TextDetox was executed locally on CPU. Prompt Guard weights were not provisioned; missing required injection coverage escalates. Thresholds and runtime caps are demonstration controls. The saved checks establish execution and integration, not detection effectiveness or deployment readiness.
+TextDetox and ungated DeBERTa are the CPU inference path. Optional Prompt Guard remains unexecuted. The injection model's card lists English/German; a non-Latin-letter gate leaves other scripts unassessed but cannot identify unsupported Latin-script languages. Required missing/unassessed checks prevent ALLOW unless another check blocks. Thresholds and runtime caps are demonstration controls. Refresh the documented validation scripts after provisioning; execution checks do not establish detection effectiveness or deployment readiness.

@@ -109,7 +109,9 @@ class Pipeline:
             result["reasons"] = ["INPUT_LIMIT"]
             result["elapsed_ms"] = (self.clock() - start) * 1000
             return result
-        findings = result["findings"] = scan_rules(envelope.text, envelope.boundary)
+        findings = result["findings"] = scan_rules(
+            envelope.text, envelope.boundary, envelope.source, envelope.sensitive_action,
+        )
         reports, plans = result["detectors"], {}
         # Rules complete only the deliberately narrow configured-secret check.
         reports["leakage"] = {

@@ -1,3 +1,5 @@
+> Historical research notes from the initial scope review. Word counts and model status below describe that revision. Read [SUBMISSION.md](SUBMISSION.md) for the current authoritative submission.
+
 # Specialist discussion: Part 1 research scope
 
 Three agents reviewed the proposal: an AI security researcher, a data scientist, and a research manager. The specialists reviewed independently, exchanged findings directly, and agreed on a minimal controlled experiment. The manager challenged priorities and scope. This is a synthesis of their actual messages, not a verbatim transcript or an experimental result.

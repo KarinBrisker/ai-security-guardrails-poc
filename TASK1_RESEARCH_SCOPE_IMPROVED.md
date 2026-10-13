@@ -1,28 +1,30 @@
+> Supporting copy of [canonical Task 1 in SUBMISSION.md](SUBMISSION.md#task-1--research-scope-inline-edge-ai-guardrails). SUBMISSION.md is the authoritative submission.
+
 # Task 1 — Research Scope: Inline Edge AI Guardrails
 
 ## Scope and assumptions
 
-- **Output:** ALLOW / BLOCK / ESCALATE, separate injection, unsafe-content, and leakage labels, rule spans/flagged windows, and per-detector coverage.
-- **Deployment:** Offline laptop CPU POC; declare hardware and latency/RAM budgets. Mobile feasibility requires separate validation.
-- **Boundaries:** Inspect user/retrieved inputs, proposed tool arguments, tool results, and final outputs before consumption. Trust application-provided provenance/permissions, never text-declared authority. Tool authorization remains independent.
-- **POC scope:** Injection, hate/abuse/profanity, and selected secret patterns. Other harmful-content categories remain explicit coverage gaps.
+- **Output:** ALLOW / BLOCK / ESCALATE, injection/toxicity/leakage evidence, flagged windows, and per-detector coverage.
+- **Deployment:** Offline laptop CPU POC. Declare latency/RAM budgets; validate mobile feasibility separately.
+- **Boundaries:** Inspect inputs, tool arguments/results, and outputs. Trust application-provided provenance, never text-declared authority. Tool authorization remains independent.
+- **Coverage:** Injection, hate/abuse/profanity, and configured secrets; other safety categories remain gaps.
 
 ## Two-layer technical direction
 
-| Component | Proposed approach and rationale | Main limitation |
+| Component | Proposed approach and rationale | Limitation |
 |---|---|---|
-| **1: Rules** | Scan all accepted text with bounded patterns for role spoofing, overrides, exfiltration cues, and secrets. Preserve original spans; inspect a normalized view and bounded decoded candidates. | Keywords are evidence, not automatic blocks; quotations and legitimate instructions create false positives. |
-| **2: ML** | Evaluate [Prompt Guard 2 86M](https://huggingface.co/meta-llama/Llama-Prompt-Guard-2-86M) for multilingual instruction-override detection and [TextDetox multilingual BERT](https://huggingface.co/textdetox/bert-multilingual-toxicity-classifier) for toxicity. Benchmark CPU inference and INT8 against unquantized quality. | Injection differs from toxicity; cue-free goal hijacking may evade override detection. Target-language reliability and edge feasibility need validation. |
-| **Routing** | Tokenizer-specific overlapping windows; prioritize rule spans and lower-trust sources. Reserve random-window sampling budget for rule-silent attacks. Cache scores by exact model input and model/tokenizer/preprocessing versions; recompute policy using current context. | Sampling can still miss attacks; overlap cannot resolve arbitrarily distributed instructions. |
-| **Enforcement** | Use per-risk thresholds with provenance and interaction type; retain strongest evidence without averaging away localized attacks. Return incomplete/unsupported status on timeout, skipped coverage, or missing detectors; hold sensitive actions for escalation. | Scores are not calibrated probabilities. Reduced coverage requires an explicit application policy, never an implicit safe verdict. |
+| **Rules** | Scan accepted text with bounded override, role-spoofing, exfiltration, and secret patterns. Retain raw/normalized spans. Combine lower-trust provenance, nearby authority/exfiltration cues, and sensitive-action context for narrow enforcement. Investigate bounded decoding separately. | Quoted attacks can match; contextual rules need benign-lookalike evaluation. |
+| **ML** | Start with accessible [DeBERTa injection](https://huggingface.co/deepset/deberta-v3-base-injection) and multilingual [TextDetox BERT](https://huggingface.co/textdetox/bert-multilingual-toxicity-classifier). Compare multilingual [Prompt Guard 2](https://huggingface.co/meta-llama/Llama-Prompt-Guard-2-86M) when access permits. Benchmark CPU FP32 and INT8 separately. | The accessible injection candidate lists English/German; Hebrew/Arabic quality is unsupported. Toxicity cannot substitute for injection detection. |
+| **Routing** | Tokenizer-specific overlapping windows; prioritize rule spans with reserved random exploration. Cache exact model inputs with model/tokenizer/preprocessing identity; recompute contextual policy. Investigate source-aware prioritization separately. | Selective scanning is triage: nonflagged partial coverage escalates. Fuller follow-up scanning may reduce review burden, at additional cost. |
+| **Enforcement** | Preserve maximum risk evidence with provisional per-risk thresholds. Missing models, unsupported inputs, timeouts, and skipped windows cannot justify ALLOW. Hold sensitive actions on escalation. | Scores are uncalibrated; text classification does not enforce tool permissions. |
 
 ## Research questions and experiments
 
-1. **Security–compute frontier:** How much recall survives selective routing? Compare rules-only, full-ML, rules+full-ML, and rules+selective-ML on identical held-out inputs. Full-ML scans every window. For routing ablation, freeze models, rules, aggregation, coverage policy, and validation-selected thresholds (provisional document-level FPR target ≤1%). Ablate sampling; report achieved FPR and escalation separately.
-2. **Long-document robustness:** Vary length, injection position, chunk boundaries, paraphrasing, Unicode/encoding, distributed instructions, and cue-free goal hijacking. Flood rule hits before payloads to test budget exhaustion. Measure misses and document-level false positives as window count grows.
-3. **Multilingual reliability:** Evaluate English, Hebrew, Arabic, and code-switching using native examples, translations, benign attack quotations, and legitimate imperative requests. Group documents and translated/paraphrased variants before splitting; hold out attack families. Inspect calibration and unsupported-language behavior.
-4. **Agent safety:** Replay benign/malicious workflows across interception points. Measure attack success, unauthorized actions, false blocks, escalation rate, and legitimate-task completion; trusted provenance must not exempt unsafe content.
+1. **Security–compute frontier:** Compare rules-only, full-ML, rules+full-ML, and rules+selective-ML on identical held-out inputs. Freeze models, rules, aggregation, coverage policy, and validation-selected thresholds for routing ablation; target document-level FPR ≤1% provisionally. Ablate sampling. Measure triage plus follow-up/review cost, escalation, and completion.
+2. **Long-document robustness:** Vary length, payload position, chunk boundaries, paraphrases, Unicode/encoding, distributed instructions, and cue-free hijacking. Flood rule cues before payloads; measure misses and document FPR as windows increase.
+3. **Multilingual reliability:** Evaluate native English, Hebrew, Arabic, and code-switching alongside reviewed translations. Include benign attack quotations and legitimate imperatives. Group originals/translations/paraphrases before splitting; hold out attack families. Assess calibration and unsupported-language behavior.
+4. **Agent safety:** Replay workflows at each boundary. Measure attacker-objective success, unauthorized actions, false blocks, escalation, and legitimate completion against an unguarded baseline with identical permissions.
 
 ## Decision criterion
 
-Measure recall/FPR by language/risk, cold/warm end-to-end p50/p95 latency, peak RAM, ML windows, and unique-token coverage. Adopt selective routing only when paired recall-loss confidence bounds meet a predeclared tolerance, latency/RAM budgets hold, and cost decreases without unacceptable task-completion loss; otherwise require fuller scanning or narrow supported scope.
+Report per-language/risk recall/FPR, paired recall-loss confidence bounds, cold/warm p50/p95 latency, peak RAM, inference calls, and unique-token coverage. Adopt selective triage only if total cost decreases within predeclared quality, runtime, and completion tolerances; otherwise increase coverage or narrow scope.

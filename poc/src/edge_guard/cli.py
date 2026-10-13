@@ -23,14 +23,14 @@ def main():
     demo = sub.add_parser("demo")
     demo.add_argument("--fixtures", default="fixtures/demo.jsonl")
     provision = sub.add_parser("provision")
-    provision.add_argument("--model", choices=["textdetox", "prompt_guard"], default="textdetox")
+    provision.add_argument("--model", choices=["textdetox", "injection", "all", "prompt_guard"], default="all")
     provision.add_argument("--models-dir", default=".models")
     smoke = sub.add_parser("smoke")
     smoke.add_argument("--models-dir", default=".models")
     args = parser.parse_args()
     try:
         if args.command == "provision":
-            print(json.dumps(provision_models(args.models_dir, args.model == "prompt_guard"), indent=2))
+            print(json.dumps(provision_models(args.models_dir, args.model == "prompt_guard", args.model in {"injection", "all"}), indent=2))
         elif args.command == "demo":
             pipeline = Pipeline({r: MockDetector(r) for r in ("injection", "toxicity")})
             for line in Path(args.fixtures).read_text().splitlines():

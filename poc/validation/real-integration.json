@@ -2,7 +2,7 @@
   "python": "3.12.13",
   "os": "Darwin",
   "architecture": "arm64",
-  "model_load_ms": 1505.1644580671564,
+  "model_load_ms": 1598.9176660077646,
   "efficacy_evaluation": false,
   "configuration": "TextDetox-only; injection explicitly disabled",
   "model_manifest": {
@@ -10,12 +10,184 @@
       "repo_id": "textdetox/bert-multilingual-toxicity-classifier",
       "revision": "8fe5526e9c6b69cf1a615104a2ad037fb266c670",
       "directory": "textdetox"
+    },
+    "injection": {
+      "repo_id": "deepset/deberta-v3-base-injection",
+      "revision": "80dda00d0b0d9a03917a7685e2ddbcd28e04dbb1",
+      "directory": "deepset_injection"
     }
   },
   "real_tokenizer_checks": {
     "multilingual_windows": 6,
     "tail_preserved": true,
     "offsets_valid": true
+  },
+  "discarded_nonblank_inputs": {
+    "zero_width_space": {
+      "decision": "ESCALATE",
+      "reasons": [
+        "detector_incomplete:toxicity:error"
+      ],
+      "mode": "full",
+      "boundary": "input",
+      "source": "user",
+      "sensitive_action": false,
+      "required_risks": [
+        "toxicity"
+      ],
+      "thresholds_validated": false,
+      "security_validated": false,
+      "findings": [],
+      "detectors": {
+        "leakage": {
+          "backend": "rules",
+          "status": "complete",
+          "score": 0.0,
+          "scope": "configured_synthetic_secret_only",
+          "rule_text_coverage": 1.0
+        },
+        "toxicity": {
+          "backend": "real",
+          "identity": "textdetox/bert-multilingual-toxicity-classifier:8fe5526e9c6b69cf1a615104a2ad037fb266c670:fp32:raw-v1:512:64:1a02e50129409b1363681ff1c4e645d21f6091f6410aac15b5fec8755e22977f:cc55f9d51076794f7c44b1a0a56dd9c72714bb4a46f4ec6b92a1b407dcd5e449",
+          "status": "error",
+          "score": null,
+          "total_windows": null,
+          "selected_windows": 0,
+          "scored_windows": 0,
+          "skipped_windows": null,
+          "token_coverage": null,
+          "cache_hits": 0,
+          "flagged_windows": [],
+          "error": "ValueError: Nonblank input produced no content tokens; detection is unassessed"
+        },
+        "injection": {
+          "backend": "unavailable",
+          "identity": "unavailable:injection",
+          "status": "unavailable",
+          "score": null,
+          "total_windows": null,
+          "selected_windows": 0,
+          "scored_windows": 0,
+          "skipped_windows": null,
+          "token_coverage": null,
+          "cache_hits": 0,
+          "flagged_windows": [],
+          "error": "Intentionally disabled in TextDetox-only execution checks"
+        }
+      },
+      "elapsed_ms": 0.04633399657905102,
+      "deadline_exceeded": false
+    },
+    "zero_width_joiner": {
+      "decision": "ESCALATE",
+      "reasons": [
+        "detector_incomplete:toxicity:error"
+      ],
+      "mode": "full",
+      "boundary": "input",
+      "source": "user",
+      "sensitive_action": false,
+      "required_risks": [
+        "toxicity"
+      ],
+      "thresholds_validated": false,
+      "security_validated": false,
+      "findings": [],
+      "detectors": {
+        "leakage": {
+          "backend": "rules",
+          "status": "complete",
+          "score": 0.0,
+          "scope": "configured_synthetic_secret_only",
+          "rule_text_coverage": 1.0
+        },
+        "toxicity": {
+          "backend": "real",
+          "identity": "textdetox/bert-multilingual-toxicity-classifier:8fe5526e9c6b69cf1a615104a2ad037fb266c670:fp32:raw-v1:512:64:1a02e50129409b1363681ff1c4e645d21f6091f6410aac15b5fec8755e22977f:cc55f9d51076794f7c44b1a0a56dd9c72714bb4a46f4ec6b92a1b407dcd5e449",
+          "status": "error",
+          "score": null,
+          "total_windows": null,
+          "selected_windows": 0,
+          "scored_windows": 0,
+          "skipped_windows": null,
+          "token_coverage": null,
+          "cache_hits": 0,
+          "flagged_windows": [],
+          "error": "ValueError: Nonblank input produced no content tokens; detection is unassessed"
+        },
+        "injection": {
+          "backend": "unavailable",
+          "identity": "unavailable:injection",
+          "status": "unavailable",
+          "score": null,
+          "total_windows": null,
+          "selected_windows": 0,
+          "scored_windows": 0,
+          "skipped_windows": null,
+          "token_coverage": null,
+          "cache_hits": 0,
+          "flagged_windows": [],
+          "error": "Intentionally disabled in TextDetox-only execution checks"
+        }
+      },
+      "elapsed_ms": 0.02937507815659046,
+      "deadline_exceeded": false
+    },
+    "nul": {
+      "decision": "ESCALATE",
+      "reasons": [
+        "detector_incomplete:toxicity:error"
+      ],
+      "mode": "full",
+      "boundary": "input",
+      "source": "user",
+      "sensitive_action": false,
+      "required_risks": [
+        "toxicity"
+      ],
+      "thresholds_validated": false,
+      "security_validated": false,
+      "findings": [],
+      "detectors": {
+        "leakage": {
+          "backend": "rules",
+          "status": "complete",
+          "score": 0.0,
+          "scope": "configured_synthetic_secret_only",
+          "rule_text_coverage": 1.0
+        },
+        "toxicity": {
+          "backend": "real",
+          "identity": "textdetox/bert-multilingual-toxicity-classifier:8fe5526e9c6b69cf1a615104a2ad037fb266c670:fp32:raw-v1:512:64:1a02e50129409b1363681ff1c4e645d21f6091f6410aac15b5fec8755e22977f:cc55f9d51076794f7c44b1a0a56dd9c72714bb4a46f4ec6b92a1b407dcd5e449",
+          "status": "error",
+          "score": null,
+          "total_windows": null,
+          "selected_windows": 0,
+          "scored_windows": 0,
+          "skipped_windows": null,
+          "token_coverage": null,
+          "cache_hits": 0,
+          "flagged_windows": [],
+          "error": "ValueError: Nonblank input produced no content tokens; detection is unassessed"
+        },
+        "injection": {
+          "backend": "unavailable",
+          "identity": "unavailable:injection",
+          "status": "unavailable",
+          "score": null,
+          "total_windows": null,
+          "selected_windows": 0,
+          "scored_windows": 0,
+          "skipped_windows": null,
+          "token_coverage": null,
+          "cache_hits": 0,
+          "flagged_windows": [],
+          "error": "Intentionally disabled in TextDetox-only execution checks"
+        }
+      },
+      "elapsed_ms": 0.02162496093660593,
+      "deadline_exceeded": false
+    }
   },
   "cases": {
     "quoted_rule_and_real_ml": {
@@ -79,7 +251,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 35.9227079898119,
+      "elapsed_ms": 36.3655419787392,
       "deadline_exceeded": false
     },
     "outgoing_rule_block": {
@@ -143,7 +315,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 15.31633292324841,
+      "elapsed_ms": 15.008000074885786,
       "deadline_exceeded": false
     },
     "toxicity_only_complete": {
@@ -195,7 +367,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 14.680249965749681,
+      "elapsed_ms": 14.202291029505432,
       "deadline_exceeded": false
     },
     "cached_toxicity_only": {
@@ -247,7 +419,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 0.11754198931157589,
+      "elapsed_ms": 0.11029199231415987,
       "deadline_exceeded": false
     },
     "real_toxicity_signal": {
@@ -308,7 +480,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 15.607665991410613,
+      "elapsed_ms": 14.082999899983406,
       "deadline_exceeded": false
     },
     "selective_partial_real": {
@@ -371,7 +543,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 58.779707993380725,
+      "elapsed_ms": 58.301958022639155,
       "deadline_exceeded": false
     }
   }

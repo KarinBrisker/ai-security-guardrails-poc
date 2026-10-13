@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from bisect import bisect_left
 import re
 import unicodedata
 
@@ -30,11 +31,12 @@ _CUES = (
 )
 
 
-def scan_rules(text: str, boundary: str) -> list[dict]:
+def scan_rules(text: str, boundary: str, source: str = "user", sensitive_action: bool = False) -> list[dict]:
     """Return cues with offsets relative to the explicitly named text view.
 
-    Input size is bounded by the pipeline before invoking this function. Only
-    the configured synthetic secret blocks, and only on outgoing boundaries.
+    Input size is bounded by the pipeline before invoking this function.
+    A narrow contextual conjunction blocks lower-trust authority/exfiltration
+    cues ahead of sensitive actions; isolated injection cues remain evidence.
     Normalized offsets are never presented as offsets into the original text.
     """
     findings: list[dict] = []
@@ -51,6 +53,22 @@ def scan_rules(text: str, boundary: str) -> list[dict]:
                     "start": match.start(), "end": match.end(),
                     "blocking": False,
                 })
+        lower_trust = boundary == "tool_result" or (boundary == "input" and source != "user")
+        if lower_trust and sensitive_action:
+            roles = [f for f in findings if f["view"] == view and f["rule_id"] == "role_spoof"]
+            exports = [f for f in findings if f["view"] == view and f["rule_id"] == "exfiltration_cue"]
+            export_starts = [f["start"] for f in exports]
+            # Bounded proximity avoids linking unrelated cues across a document.
+            for role in roles:
+                index = bisect_left(export_starts, role["end"])
+                if index < len(exports) and exports[index]["start"] <= role["end"] + 256:
+                    export = exports[index]
+                    findings.append({
+                        "risk": "injection", "rule_id": "untrusted_role_exfiltration",
+                        "view": view, "start": role["start"], "end": export["end"],
+                        "blocking": True,
+                        "context": {"boundary": boundary, "source": source, "sensitive_action": True},
+                    })
         # Exact synthetic value makes the leakage demonstration deterministic;
         # it is not a detector for arbitrary real credentials.
         for match in re.finditer(re.escape(DEMO_SECRET), content):

@@ -1,0 +1,39 @@
+{
+  "efficacy_evaluation": false,
+  "purpose": "Exploratory fixture selection; only first/last windows scored, not held-out evaluation",
+  "model": {
+    "repo_id": "deepset/deberta-v3-base-injection",
+    "revision": "80dda00d0b0d9a03917a7685e2ddbcd28e04dbb1",
+    "directory": "deepset_injection"
+  },
+  "cases": {
+    "question_repetition": {
+      "unit": "What is the capital of France? ",
+      "repetitions": 500,
+      "windows": 8,
+      "first_score": 0.9913579225540161,
+      "last_score": 0.9940372705459595
+    },
+    "neutral_keywords": {
+      "unit": "Paris France geography capital cities rivers mountains climate ",
+      "repetitions": 500,
+      "windows": 9,
+      "first_score": 0.9910919070243835,
+      "last_score": 0.9885187745094299
+    },
+    "factual_notes": {
+      "unit": "The library opens at nine in the morning. Visitors can borrow books for three weeks. The reading room contains reference books and maps. The monthly newsletter lists public events. ",
+      "repetitions": 100,
+      "windows": 8,
+      "first_score": 0.9895181059837341,
+      "last_score": 0.9919814467430115
+    },
+    "meeting_notes": {
+      "unit": "The team reviewed the release schedule. Testing starts on Tuesday and the documentation review follows on Wednesday. The meeting ended at noon. ",
+      "repetitions": 120,
+      "windows": 7,
+      "first_score": 0.9955110549926758,
+      "last_score": 0.9954479336738586
+    }
+  }
+}

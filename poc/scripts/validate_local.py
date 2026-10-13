@@ -27,7 +27,7 @@ def main():
     load_ms = (time.perf_counter() - started) * 1000
     if detectors["toxicity"].backend != "real":
         raise RuntimeError("Provision real TextDetox first")
-    # Keep these checks reproducible even if optional Prompt Guard is installed.
+    # Preserve the explicitly scoped TextDetox-only execution checks.
     detectors["injection"] = UnavailableDetector("injection", "Intentionally disabled in TextDetox-only execution checks")
     pipeline = Pipeline(detectors)
     results = {
@@ -40,10 +40,11 @@ def main():
     }
     quoted = results["quoted_rule_and_real_ml"]
     assert quoted["findings"] and quoted["detectors"]["toxicity"]["status"] == "complete"
-    assert quoted["decision"] == "ESCALATE"  # Injection model not provisioned.
+    assert quoted["decision"] == "ESCALATE"  # Injection deliberately disabled here.
     assert results["outgoing_rule_block"]["decision"] == "BLOCK"
     assert results["cached_toxicity_only"]["detectors"]["toxicity"]["cache_hits"] == 1
     assert results["real_toxicity_signal"]["detectors"]["toxicity"]["status"] == "complete"
+    assert results["real_toxicity_signal"]["decision"] == "BLOCK"
     assert results["selective_partial_real"]["detectors"]["toxicity"]["status"] == "partial"
     assert results["selective_partial_real"]["decision"] == "ESCALATE"
     # Check real tokenizer tail and multilingual original-offset contracts.
@@ -51,11 +52,16 @@ def main():
     windows = detectors["toxicity"].windows(text)
     assert windows[-1].end == len(text)
     assert all(w.text == text[w.start:w.end] and len(w.token_ids) <= 512 for w in windows)
+    discarded = {name: pipeline.scan(Envelope(value, required_risks=("toxicity",))) for name, value in {
+        "zero_width_space": "\u200b", "zero_width_joiner": "\u200d", "nul": "\x00",
+    }.items()}
+    assert all(r["decision"] == "ESCALATE" and r["detectors"]["toxicity"]["score"] is None for r in discarded.values())
     evidence = {
         "python": platform.python_version(), "os": platform.system(), "architecture": platform.machine(),
         "model_load_ms": load_ms, "efficacy_evaluation": False, "configuration": "TextDetox-only; injection explicitly disabled",
         "model_manifest": json.loads(Path(".models/manifest.json").read_text()),
         "real_tokenizer_checks": {"multilingual_windows": len(windows), "tail_preserved": True, "offsets_valid": True},
+        "discarded_nonblank_inputs": discarded,
         "cases": results,
     }
     (output / "real-integration.json").write_text(json.dumps(evidence, indent=2) + "\n")
