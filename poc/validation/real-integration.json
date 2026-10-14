@@ -2,7 +2,7 @@
   "python": "3.12.13",
   "os": "Darwin",
   "architecture": "arm64",
-  "model_load_ms": 1598.9176660077646,
+  "model_load_ms": 2192.596915992908,
   "efficacy_evaluation": false,
   "configuration": "TextDetox-only; injection explicitly disabled",
   "model_manifest": {
@@ -75,7 +75,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 0.04633399657905102,
+      "elapsed_ms": 0.06437499541789293,
       "deadline_exceeded": false
     },
     "zero_width_joiner": {
@@ -130,7 +130,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 0.02937507815659046,
+      "elapsed_ms": 0.03745907451957464,
       "deadline_exceeded": false
     },
     "nul": {
@@ -185,7 +185,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 0.02162496093660593,
+      "elapsed_ms": 0.033207936212420464,
       "deadline_exceeded": false
     }
   },
@@ -251,7 +251,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 36.3655419787392,
+      "elapsed_ms": 48.809624975547194,
       "deadline_exceeded": false
     },
     "outgoing_rule_block": {
@@ -315,7 +315,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 15.008000074885786,
+      "elapsed_ms": 19.82625003438443,
       "deadline_exceeded": false
     },
     "toxicity_only_complete": {
@@ -367,7 +367,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 14.202291029505432,
+      "elapsed_ms": 17.742707976140082,
       "deadline_exceeded": false
     },
     "cached_toxicity_only": {
@@ -419,7 +419,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 0.11029199231415987,
+      "elapsed_ms": 0.17854105681180954,
       "deadline_exceeded": false
     },
     "real_toxicity_signal": {
@@ -480,7 +480,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 14.082999899983406,
+      "elapsed_ms": 18.056957982480526,
       "deadline_exceeded": false
     },
     "selective_partial_real": {
@@ -543,7 +543,7 @@
           "error": "Intentionally disabled in TextDetox-only execution checks"
         }
       },
-      "elapsed_ms": 58.301958022639155,
+      "elapsed_ms": 73.93962505739182,
       "deadline_exceeded": false
     }
   }

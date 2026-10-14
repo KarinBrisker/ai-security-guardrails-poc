@@ -2,12 +2,12 @@
   "python": "3.12.13",
   "os": "Darwin",
   "architecture": "arm64",
-  "cpu": null,
+  "cpu": "Apple M4 Pro",
   "torch": "2.14.1",
   "transformers": "4.57.6",
   "torch_threads": 10,
-  "model_load_ms": 714.7150420350954,
-  "peak_process_rss_bytes": 1413677056,
+  "model_load_ms": 947.1762920729816,
+  "peak_process_rss_bytes": 1387790336,
   "efficacy_evaluation": false,
   "configuration": "Two pretrained CPU FP32 classifiers; provisional 0.5 thresholds",
   "model_manifest": {
@@ -78,7 +78,7 @@
           "flagged_windows": []
         }
       },
-      "elapsed_ms": 97.7391250198707,
+      "elapsed_ms": 127.20025004819036,
       "deadline_exceeded": false
     },
     "real_injection_and_rules": {
@@ -148,7 +148,7 @@
           ]
         }
       },
-      "elapsed_ms": 44.24279206432402,
+      "elapsed_ms": 56.2453749589622,
       "deadline_exceeded": false
     },
     "cached_injection": {
@@ -218,7 +218,7 @@
           ]
         }
       },
-      "elapsed_ms": 0.2437499351799488,
+      "elapsed_ms": 0.31633395701646805,
       "deadline_exceeded": false
     },
     "real_injection_without_rule_cues": {
@@ -279,7 +279,7 @@
           ]
         }
       },
-      "elapsed_ms": 41.6450829943642,
+      "elapsed_ms": 51.7715000314638,
       "deadline_exceeded": false
     },
     "benign_quoted_attack": {
@@ -349,7 +349,7 @@
           ]
         }
       },
-      "elapsed_ms": 42.45658393483609,
+      "elapsed_ms": 50.65720796119422,
       "deadline_exceeded": false
     },
     "contextual_user": {
@@ -435,7 +435,7 @@
           ]
         }
       },
-      "elapsed_ms": 42.7150420146063,
+      "elapsed_ms": 50.32004101667553,
       "deadline_exceeded": false
     },
     "contextual_tool": {
@@ -535,7 +535,7 @@
           ]
         }
       },
-      "elapsed_ms": 0.24641701020300388,
+      "elapsed_ms": 0.328624970279634,
       "deadline_exceeded": false
     },
     "real_toxicity_joint": {
@@ -604,7 +604,7 @@
           ]
         }
       },
-      "elapsed_ms": 41.456167004071176,
+      "elapsed_ms": 48.981500091031194,
       "deadline_exceeded": false
     },
     "hebrew_unsupported_injection": {
@@ -659,7 +659,7 @@
           "error": "unsupported_script: deepset injection candidate covers English/German only"
         }
       },
-      "elapsed_ms": 14.377416926436126,
+      "elapsed_ms": 16.412290977314115,
       "deadline_exceeded": false
     },
     "arabic_unsupported_injection": {
@@ -714,7 +714,7 @@
           "error": "unsupported_script: deepset injection candidate covers English/German only"
         }
       },
-      "elapsed_ms": 14.493125025182962,
+      "elapsed_ms": 17.598125035874546,
       "deadline_exceeded": false
     },
     "rule_only_user": {
@@ -796,7 +796,7 @@
           "error": "Intentionally disabled to isolate contextual policy"
         }
       },
-      "elapsed_ms": 0.026333029381930828,
+      "elapsed_ms": 0.038207974284887314,
       "deadline_exceeded": false
     },
     "rule_only_tool": {
@@ -890,7 +890,7 @@
           "error": "Intentionally disabled to isolate contextual policy"
         }
       },
-      "elapsed_ms": 0.01225003506988287,
+      "elapsed_ms": 0.020208070054650307,
       "deadline_exceeded": false
     },
     "benign_repetition_joint_triage": {
@@ -957,7 +957,7 @@
           ]
         }
       },
-      "elapsed_ms": 321.3798749493435,
+      "elapsed_ms": 417.22479194868356,
       "deadline_exceeded": false
     },
     "selective_triage": {
@@ -997,7 +997,7 @@
           "flagged_windows": []
         }
       },
-      "elapsed_ms": 102.86504088435322,
+      "elapsed_ms": 135.8340420993045,
       "deadline_exceeded": false
     },
     "full_followup": {
@@ -1035,7 +1035,7 @@
           "flagged_windows": []
         }
       },
-      "elapsed_ms": 328.07745796162635,
+      "elapsed_ms": 424.20887504704297,
       "deadline_exceeded": false
     }
   }

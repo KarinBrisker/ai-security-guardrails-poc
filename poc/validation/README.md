@@ -1,10 +1,10 @@
 # Execution checks
 
-These artifacts establish control flow and real local execution. They are not an efficacy benchmark.
+Refreshed on 14 October 2026 from code revision `dd94eba97b297ea677bf3745fe40eb8d2980678f`, including the `synthetic_secret` contract and stricter smoke checks. Dependency setup used `uv sync --locked --extra ml --extra test`; model execution used `HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1`. These artifacts establish control flow and real local execution. They are not an efficacy benchmark.
 
-- `tests.txt`: 47 behavioral/adapter tests passed on the preceding revision. This result predates the `synthetic_secret` API rename and stricter smoke checks; the tests were not rerun for those edits. Most use test doubles; model-polarity tests require the ML extra and otherwise skip.
+- `tests.txt`: 47 behavioral/adapter tests passed on the validated revision. Most use test doubles; model-polarity checks ran with the ML extra installed.
 - `demo.jsonl`: ten explicit mock fixtures; operational decisions remain distinct from simulated decisions.
-- `real-smoke.json`: historical TextDetox-only loading, first CPU inference, and cached request. Its injection report is unavailable; it predates the updated smoke command, which now fails unless both models complete.
+- `real-smoke.json`: both real classifiers loaded, produced complete finite scores on the first request, and reused one cached score each on the repeated request. The stricter CLI smoke checks passed.
 - `real-integration.json`: six real integration cases on Python 3.12.13, macOS ARM64, CPU FP32. Shows rules and ML in the same request, outgoing synthetic-secret blocking, complete toxicity-only coverage, cache reuse, ML-triggered toxicity blocking, and partial selective coverage. Also checks real multilingual tokenizer offsets/tail retention and escalation for nonblank inputs discarded by the tokenizer.
 
 The toxicity stimulus produced a real score of approximately 0.99765 and `BLOCK` at the provisional 0.5 threshold. This single execution example establishes the ML enforcement branch; it does not establish a calibrated probability, recall, FPR, or multilingual quality. The selective case scored two of seven windows, reported approximately 0.34094 unique-token coverage, and escalated.
@@ -15,7 +15,7 @@ Single-run durations are descriptive observations, not p50/p95 estimates or a de
 
 ## Real injection and joint execution
 
-`real-injection.json` adds 15 execution cases using both real classifiers on macOS ARM64, CPU FP32, Python 3.12.13. DeBERTa is pinned to `80dda00d0b0d9a03917a7685e2ddbcd28e04dbb1`; TextDetox retains the revision above. Runtime flags disable network access. CPU model identification was unavailable inside the sandbox; architecture and Torch thread count are recorded.
+`real-injection.json` adds 15 execution cases using both real classifiers on macOS ARM64, CPU FP32, Python 3.12.13. DeBERTa is pinned to `80dda00d0b0d9a03917a7685e2ddbcd28e04dbb1`; TextDetox retains the revision above. Runtime flags disable network access. The run used an Apple M4 Pro; CPU identity, architecture, and Torch thread count are recorded.
 
 - A clean question receives joint ALLOW with complete coverage.
 - An explicit override gets an injection score approximately 0.9990 and BLOCK. A cue-free instruction gets approximately 0.9988 and BLOCK without any rule finding.
@@ -26,4 +26,6 @@ Single-run durations are descriptive observations, not p50/p95 estimates or a de
 
 `long-input-probes.json` preserves exploratory fixture checks for four benign repeated-text styles. Only first/last injection windows were scored, all above threshold. These probes informed the demo; they are not held-out evaluation or complete document coverage.
 
-The joint process recorded about 1.27 GiB peak RSS in this run. This includes the interpreter, both models, and scan state; it is not a per-request memory allocation or a hard cap. These results do not establish laptop latency targets or mobile feasibility. No threshold tuning or quoted-text exemption was introduced to conceal the false positives.
+The joint process recorded about 1.29 GiB peak RSS in this run. This includes the interpreter, both models, and scan state; it is not a per-request memory allocation or a hard cap. These results do not establish laptop latency targets or mobile feasibility. No threshold tuning or quoted-text exemption was introduced to conceal the false positives.
+
+A real CLI `scan` using the English question “What is the capital of France?” with both injection and toxicity required returned ALLOW, complete coverage, and the documented JSON fields. Existing benign-quotation/repetition false positives remain in the refreshed joint results.

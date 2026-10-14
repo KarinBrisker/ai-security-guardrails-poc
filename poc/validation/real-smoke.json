@@ -1,5 +1,5 @@
 {
-  "model_load_ms": 12601.697291946039,
+  "model_load_ms": 2226.9453749759123,
   "first_request": {
     "decision": "ALLOW",
     "reasons": [],
@@ -35,21 +35,20 @@
         "flagged_windows": []
       },
       "injection": {
-        "backend": "unavailable",
-        "identity": "unavailable:injection",
-        "status": "unavailable",
-        "score": null,
-        "total_windows": null,
-        "selected_windows": 0,
-        "scored_windows": 0,
-        "skipped_windows": null,
-        "token_coverage": null,
+        "backend": "real",
+        "identity": "deepset/deberta-v3-base-injection:80dda00d0b0d9a03917a7685e2ddbcd28e04dbb1:fp32:raw-v1:512:64:5de9082b590ed426179524a418676ab03a3c15bd8b612d3cdde0a164ff583de9:a2b2ae8ced43b5dd84518c55b06f8c6d6c51b6240b835886433a094eb6d7f7bd",
+        "status": "complete",
+        "score": 0.27851614356040955,
+        "total_windows": 1,
+        "selected_windows": 1,
+        "scored_windows": 1,
+        "skipped_windows": 0,
+        "token_coverage": 1.0,
         "cache_hits": 0,
-        "flagged_windows": [],
-        "error": "Local prompt_guard model is absent; run explicit model setup"
+        "flagged_windows": []
       }
     },
-    "elapsed_ms": 527.244875091128,
+    "elapsed_ms": 905.1222919952124,
     "deadline_exceeded": false
   },
   "cached_request": {
@@ -87,21 +86,20 @@
         "flagged_windows": []
       },
       "injection": {
-        "backend": "unavailable",
-        "identity": "unavailable:injection",
-        "status": "unavailable",
-        "score": null,
-        "total_windows": null,
-        "selected_windows": 0,
-        "scored_windows": 0,
-        "skipped_windows": null,
-        "token_coverage": null,
-        "cache_hits": 0,
-        "flagged_windows": [],
-        "error": "Local prompt_guard model is absent; run explicit model setup"
+        "backend": "real",
+        "identity": "deepset/deberta-v3-base-injection:80dda00d0b0d9a03917a7685e2ddbcd28e04dbb1:fp32:raw-v1:512:64:5de9082b590ed426179524a418676ab03a3c15bd8b612d3cdde0a164ff583de9:a2b2ae8ced43b5dd84518c55b06f8c6d6c51b6240b835886433a094eb6d7f7bd",
+        "status": "complete",
+        "score": 0.27851614356040955,
+        "total_windows": 1,
+        "selected_windows": 1,
+        "scored_windows": 1,
+        "skipped_windows": 0,
+        "token_coverage": 1.0,
+        "cache_hits": 1,
+        "flagged_windows": []
       }
     },
-    "elapsed_ms": 0.19066594541072845,
+    "elapsed_ms": 0.3777920501306653,
     "deadline_exceeded": false
   },
   "efficacy_evaluation": false

@@ -34,7 +34,7 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 uv run python scripts/validate_local.py
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 uv run python scripts/validate_injection.py
 ```
 
-The first script retains the original TextDetox-only checks and may include joint checks in the refreshed evidence. The second explicitly exercises both classifiers and saves `validation/real-injection.json`, including contextual rule isolation, benign quotations, and toxicity-scoped triage plus a complete follow-up. The follow-up deliberately excludes injection coverage; its ALLOW makes no injection-safety claim. Joint scanning blocks the benign quote and repeated benign questions, which are preserved as observed false positives. Run both scripts after provisioning to refresh evidence for the current source. Neither script estimates detection quality.
+The first script runs tests, mock fixtures, and explicitly scoped TextDetox-only integration checks. The second explicitly exercises both classifiers and saves `validation/real-injection.json`, including contextual rule isolation, benign quotations, and toxicity-scoped triage plus a complete follow-up. The follow-up deliberately excludes injection coverage; its ALLOW makes no injection-safety claim. Joint scanning blocks the benign quote and repeated benign questions, which are preserved as observed false positives. Run both scripts after provisioning to refresh evidence for the current source. Neither script estimates detection quality.
 
 Create `envelope.json` with an application-supplied envelope:
 
@@ -50,7 +50,7 @@ Create `envelope.json` with an application-supplied envelope:
 
 `boundary` is `input`, `tool_call`, `tool_result`, or `output`. `source` is a free application label, not authority claimed by the scanned text. The default required risks are injection and toxicity. With only TextDetox installed, its real result is available, but missing injection coverage prevents ALLOW. Narrowing `required_risks` deliberately narrows the requested coverage; it does not establish safety against omitted risks.
 
-Prompt Guard is gated. Obtain the necessary Hugging Face access before explicitly provisioning it; ordinary scans load only local files. The real-model smoke requires both configured classifiers, checks complete coverage and finite scores on a repeated English input, and verifies cache reuse for both. It does not validate detection accuracy or multilingual quality. The saved `real-smoke.json` predates this stricter check and records a TextDetox-only run with injection unavailable.
+Prompt Guard is gated. Obtain the necessary Hugging Face access before explicitly provisioning it; ordinary scans load only local files. The real-model smoke requires both configured classifiers, checks complete coverage and finite scores on a repeated English input, and verifies cache reuse for both. It does not validate detection accuracy or multilingual quality. The refreshed `real-smoke.json` records both real classifiers completing inference and reusing cached scores.
 
 ```sh
 uv run edge-guard provision --model prompt_guard --models-dir .models
