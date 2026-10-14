@@ -1,6 +1,6 @@
 # Inline edge guardrail POC
 
-The scanner produces an operational ALLOW, BLOCK, or ESCALATE decision, separate injection/toxicity/leakage results, rule evidence, flagged model windows, and coverage metadata. Mock execution additionally reports a simulated decision. This is a synchronous CPU text scanner with application-supplied boundary and provenance, not an agent authorization service.
+The scanner produces an operational ALLOW, BLOCK, or ESCALATE decision, separate injection/toxicity/synthetic-secret results, rule evidence, flagged model windows, and coverage metadata. Mock execution additionally reports a simulated decision. This is a synchronous CPU text scanner with application-supplied boundary and provenance, not an agent authorization service.
 
 ## Detection and enforcement
 
@@ -10,7 +10,7 @@ The scanner produces an operational ALLOW, BLOCK, or ESCALATE decision, separate
 4. Full mode scans every window within the configured cap. If the cap is exceeded, preflight prevents classifier inference and records incomplete coverage. Experimental selective mode is triage, not a low-latency ALLOW mechanism. It reserves random exploration capacity in addition to prioritizing windows overlapping raw rule findings; it does not establish full coverage unless all windows are selected. Normalized-only cues do not drive raw-window priority because their offsets are in another view.
 5. Aggregate the strongest risk evidence rather than averaging away a localized attack. A positive, valid real detection can BLOCK even when other coverage is incomplete. Otherwise required missing, mock, timed-out, or incomplete detection produces ESCALATE. ALLOW requires complete required real-detector coverage below the provisional thresholds.
 
-The exact literal `DEMO_SECRET_DO_NOT_EXPORT` demonstrates outgoing leakage blocking at `tool_call` and `output` boundaries. Its presence in incoming material is evidence. This is a deliberately narrow selected-secret contract, not general data-loss prevention. Separately, `source` and `sensitive_action` drive the contextual injection rule: tool results always count as lower trust; input sources other than `user` also count as lower trust. The exfiltration cue must start after the role marker and within 256 characters of its end, in the same text view. Source-specific window prioritization and an action executor remain deferred. The caller holds sensitive actions on escalation and retains independent tool authorization.
+The exact literal `DEMO_SECRET_DO_NOT_EXPORT` demonstrates outgoing synthetic-secret blocking at `tool_call` and `output` boundaries. Its presence in incoming material is evidence. The supported required-risk label is `synthetic_secret`; generic `leakage` is rejected. This is a deliberately narrow selected-secret contract, not general data-loss prevention. Separately, `source` and `sensitive_action` drive the contextual injection rule: tool results always count as lower trust; input sources other than `user` also count as lower trust. The exfiltration cue must start after the role marker and within 256 characters of its end, in the same text view. Source-specific window prioritization and an action executor remain deferred. The caller holds sensitive actions on escalation and retains independent tool authorization.
 
 ## Backends and coverage
 

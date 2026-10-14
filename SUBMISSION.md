@@ -6,7 +6,7 @@ Research scope, implemented POC, and proposed evaluation strategy. Quality exper
 
 ## Scope and assumptions
 
-- **Output:** ALLOW / BLOCK / ESCALATE, injection/toxicity/leakage evidence, flagged windows, and per-detector coverage.
+- **Output:** ALLOW / BLOCK / ESCALATE, injection/toxicity/synthetic-secret evidence, flagged windows, and per-detector coverage.
 - **Deployment:** Offline laptop CPU POC. Declare latency/RAM budgets; validate mobile feasibility separately.
 - **Boundaries:** Inspect inputs, tool arguments/results, and outputs. Trust application-provided provenance, never text-declared authority. Tool authorization remains independent.
 - **Coverage:** Injection, hate/abuse/profanity, and configured secrets; other safety categories remain gaps.
@@ -46,7 +46,7 @@ uv run edge-guard demo
 uv run pytest
 ```
 
-The deterministic demo explicitly uses mocks. For real pretrained CPU inference:
+The deterministic demo explicitly uses mocks. For real pretrained CPU inference, the smoke command checks both classifiers:
 
 ```sh
 uv sync --extra ml --extra test
@@ -69,7 +69,7 @@ Provisioning is the explicit network step. Runtime loads local files only. Depen
 | Agent reuse | A bounded 128-entry LRU caches exact model inputs and model/tokenizer/preprocessing identities; current boundary policy is reevaluated. | Only identical inputs benefit. A narrow source-aware blocking rule is implemented; source-aware window prioritization and action execution remain deferred. |
 | Enforcement | Maximum per-risk score preserves localized signals. Real scores ≥0.5, the contextual injection rule, or outgoing `DEMO_SECRET_DO_NOT_EXPORT` can BLOCK. Otherwise incomplete required checks ESCALATE; complete checks below threshold ALLOW. | Thresholds are provisional, not calibrated or validated against the proposed FPR target. The secret rule is deliberately narrow. |
 
-Default required risks are injection and toxicity. Therefore TextDetox alone does not authorize an interaction when injection coverage is absent. Mock predictions produce a separate `simulated_decision` and never authorize an operational ALLOW. The synthetic-secret and contextual injection rules may independently BLOCK during mock execution.
+Default required risks are injection and toxicity. Therefore TextDetox alone does not authorize an interaction when injection coverage is absent. The supported rule-only risk label is `synthetic_secret`, which checks exactly `DEMO_SECRET_DO_NOT_EXPORT`; generic `leakage` is rejected and arbitrary credentials are outside its scope. Mock predictions produce a separate `simulated_decision` and never authorize an operational ALLOW. The synthetic-secret and contextual injection rules may independently BLOCK during mock execution.
 
 An input cap of 65,536 characters precedes rules/tokenization. A cooperative 30-second scan deadline excludes model loading and can overrun during synchronous inference. Hard RAM enforcement, cancellation, encoded-payload decoding, quantization, and mobile deployment are deferred. Windows follow the classifier limits; overlap trades local boundary context against repeated inference; caps bound work/state. The 30-second development guard is not a real-time target. Nonblank input discarded by the tokenizer is unassessed and escalates.
 

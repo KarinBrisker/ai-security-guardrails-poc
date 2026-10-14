@@ -39,11 +39,11 @@
       "security_validated": false,
       "findings": [],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -94,11 +94,11 @@
       "security_validated": false,
       "findings": [],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -149,11 +149,11 @@
       "security_validated": false,
       "findings": [],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -216,11 +216,11 @@
         }
       ],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -271,7 +271,7 @@
       "security_validated": false,
       "findings": [
         {
-          "risk": "leakage",
+          "risk": "synthetic_secret",
           "rule_id": "synthetic_secret",
           "view": "raw",
           "start": 0,
@@ -280,11 +280,11 @@
         }
       ],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -332,11 +332,11 @@
       "security_validated": false,
       "findings": [],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -384,11 +384,11 @@
       "security_validated": false,
       "findings": [],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -438,11 +438,11 @@
       "security_validated": false,
       "findings": [],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {
@@ -508,11 +508,11 @@
         }
       ],
       "detectors": {
-        "leakage": {
+        "synthetic_secret": {
           "backend": "rules",
           "status": "complete",
           "score": 0.0,
-          "scope": "configured_synthetic_secret_only",
+          "scope": "exact_demo_literal_only",
           "rule_text_coverage": 1.0
         },
         "toxicity": {

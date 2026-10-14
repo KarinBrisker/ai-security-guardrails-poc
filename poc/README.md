@@ -14,7 +14,7 @@ uv run edge-guard demo
 uv run pytest
 ```
 
-The demo explicitly uses mocks and the JSONL fixtures in `fixtures/demo.jsonl`. Reserved `[MOCK_INJECTION]` and `[MOCK_TOXICITY]` markers create deterministic simulated scores. A mock result includes a separate `simulated_decision`; mocked required coverage cannot justify operational ALLOW. The configured literal `DEMO_SECRET_DO_NOT_EXPORT` demonstrates a real rule-based outgoing leakage block. These examples are control-flow fixtures, not a quality benchmark.
+The demo explicitly uses mocks and the JSONL fixtures in `fixtures/demo.jsonl`. Reserved `[MOCK_INJECTION]` and `[MOCK_TOXICITY]` markers create deterministic simulated scores. A mock result includes a separate `simulated_decision`; mocked required coverage cannot justify operational ALLOW. The configured literal `DEMO_SECRET_DO_NOT_EXPORT` demonstrates a real rule-based outgoing synthetic-secret block. The supported rule-only risk label is `synthetic_secret`; `leakage` is rejected because general credential detection is not implemented. These examples are control-flow fixtures, not a quality benchmark.
 
 ## Provision and scan with real models
 
@@ -50,7 +50,7 @@ Create `envelope.json` with an application-supplied envelope:
 
 `boundary` is `input`, `tool_call`, `tool_result`, or `output`. `source` is a free application label, not authority claimed by the scanned text. The default required risks are injection and toxicity. With only TextDetox installed, its real result is available, but missing injection coverage prevents ALLOW. Narrowing `required_risks` deliberately narrows the requested coverage; it does not establish safety against omitted risks.
 
-Prompt Guard is gated. Obtain the necessary Hugging Face access before explicitly provisioning it; ordinary scans load only local files. The real-model smoke validates model loading, output shape, and finite scores. It does not validate multilingual quality or accuracy.
+Prompt Guard is gated. Obtain the necessary Hugging Face access before explicitly provisioning it; ordinary scans load only local files. The real-model smoke requires both configured classifiers, checks complete coverage and finite scores on a repeated English input, and verifies cache reuse for both. It does not validate detection accuracy or multilingual quality. The saved `real-smoke.json` predates this stricter check and records a TextDetox-only run with injection unavailable.
 
 ```sh
 uv run edge-guard provision --model prompt_guard --models-dir .models

@@ -46,3 +46,5 @@ The separate [literature review](LITERATURE_ALIGNMENT.md) supports positioning t
 - Task 1 is 434 whitespace-delimited words in the authoritative submission. Supporting Task 1/3 copies explicitly link to it. Selective routing is described as triage; deadline/RAM controls remain POC controls.
 
 The current candidate strengthens execution evidence and layer integration. It does not resolve injection false positives, establish multilingual injection quality, prove low-latency ALLOW on long documents, or supply a full proxy/agent runtime.
+
+The subsequent risk-label and smoke-command hardening narrows the synthetic-secret API and requires both real models for smoke success. The persisted 47-test result predates those edits and was not rerun in this update.

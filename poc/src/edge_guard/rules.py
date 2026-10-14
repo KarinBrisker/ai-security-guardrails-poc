@@ -69,11 +69,11 @@ def scan_rules(text: str, boundary: str, source: str = "user", sensitive_action:
                         "blocking": True,
                         "context": {"boundary": boundary, "source": source, "sensitive_action": True},
                     })
-        # Exact synthetic value makes the leakage demonstration deterministic;
+        # Exact synthetic value makes this configured-secret demonstration deterministic;
         # it is not a detector for arbitrary real credentials.
         for match in re.finditer(re.escape(DEMO_SECRET), content):
             findings.append({
-                "risk": "leakage", "rule_id": "synthetic_secret", "view": view,
+                "risk": "synthetic_secret", "rule_id": "synthetic_secret", "view": view,
                 "start": match.start(), "end": match.end(),
                 "blocking": boundary in _OUTGOING,
             })

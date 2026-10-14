@@ -2,9 +2,9 @@
 
 These artifacts establish control flow and real local execution. They are not an efficacy benchmark.
 
-- `tests.txt`: 47 behavioral/adapter tests passed. Most use test doubles; model-polarity tests require the ML extra and otherwise skip.
+- `tests.txt`: 47 behavioral/adapter tests passed on the preceding revision. This result predates the `synthetic_secret` API rename and stricter smoke checks; the tests were not rerun for those edits. Most use test doubles; model-polarity tests require the ML extra and otherwise skip.
 - `demo.jsonl`: ten explicit mock fixtures; operational decisions remain distinct from simulated decisions.
-- `real-smoke.json`: real TextDetox loading, first CPU inference, and an identical cached request, with offline environment flags enabled.
+- `real-smoke.json`: historical TextDetox-only loading, first CPU inference, and cached request. Its injection report is unavailable; it predates the updated smoke command, which now fails unless both models complete.
 - `real-integration.json`: six real integration cases on Python 3.12.13, macOS ARM64, CPU FP32. Shows rules and ML in the same request, outgoing synthetic-secret blocking, complete toxicity-only coverage, cache reuse, ML-triggered toxicity blocking, and partial selective coverage. Also checks real multilingual tokenizer offsets/tail retention and escalation for nonblank inputs discarded by the tokenizer.
 
 The toxicity stimulus produced a real score of approximately 0.99765 and `BLOCK` at the provisional 0.5 threshold. This single execution example establishes the ML enforcement branch; it does not establish a calibrated probability, recall, FPR, or multilingual quality. The selective case scored two of seven windows, reported approximately 0.34094 unique-token coverage, and escalated.

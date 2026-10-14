@@ -4,7 +4,7 @@
 
 ## Scope and assumptions
 
-- **Output:** ALLOW / BLOCK / ESCALATE, injection/toxicity/leakage evidence, flagged windows, and per-detector coverage.
+- **Output:** ALLOW / BLOCK / ESCALATE, injection/toxicity/synthetic-secret evidence, flagged windows, and per-detector coverage.
 - **Deployment:** Offline laptop CPU POC. Declare latency/RAM budgets; validate mobile feasibility separately.
 - **Boundaries:** Inspect inputs, tool arguments/results, and outputs. Trust application-provided provenance, never text-declared authority. Tool authorization remains independent.
 - **Coverage:** Injection, hate/abuse/profanity, and configured secrets; other safety categories remain gaps.

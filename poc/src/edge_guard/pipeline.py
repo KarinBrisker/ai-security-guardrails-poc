@@ -30,7 +30,7 @@ class Envelope:
             raise ValueError("source must be a nonempty application-provided string")
         if not isinstance(self.sensitive_action, bool):
             raise ValueError("sensitive_action must be boolean")
-        if not self.required_risks or any(r not in {"injection", "toxicity", "leakage"} for r in self.required_risks):
+        if not self.required_risks or any(r not in {"injection", "toxicity", "synthetic_secret"} for r in self.required_risks):
             raise ValueError("required_risks must be nonempty and use known labels")
 
     @classmethod
@@ -114,9 +114,9 @@ class Pipeline:
         )
         reports, plans = result["detectors"], {}
         # Rules complete only the deliberately narrow configured-secret check.
-        reports["leakage"] = {
+        reports["synthetic_secret"] = {
             "backend": "rules", "status": "complete", "score": 0.0,
-            "scope": "configured_synthetic_secret_only", "rule_text_coverage": 1.0,
+            "scope": "exact_demo_literal_only", "rule_text_coverage": 1.0,
         }
         for risk, detector in self.detectors.items():
             report = reports[risk] = {

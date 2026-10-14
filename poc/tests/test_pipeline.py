@@ -199,7 +199,7 @@ def test_context_rule_blocks_without_ml_but_user_request_stays_unassessed():
     assert user["decision"] == "ESCALATE"
     assert tool["decision"] == retrieved["decision"] == "BLOCK"
     assert "blocking_rule:untrusted_role_exfiltration" in tool["reasons"]
-    assert all(r["backend"] == "unavailable" for k, r in tool["detectors"].items() if k != "leakage")
+    assert all(r["backend"] == "unavailable" for k, r in tool["detectors"].items() if k != "synthetic_secret")
 
 
 @pytest.mark.parametrize("text,sensitive", [

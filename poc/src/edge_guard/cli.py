@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import math
 from pathlib import Path
 import sys
 import time
@@ -43,14 +44,25 @@ def main():
             started = time.perf_counter()
             detectors = build_detectors("real", args.models_dir)
             load_ms = (time.perf_counter() - started) * 1000
-            detector = detectors["toxicity"]
-            if detector.backend != "real":
-                raise RuntimeError(getattr(detector, "reason", "TextDetox is not available"))
+            for risk in ("toxicity", "injection"):
+                detector = detectors[risk]
+                if detector.backend != "real":
+                    raise RuntimeError(getattr(detector, "reason", f"Real {risk} model is not available"))
             pipeline = Pipeline(detectors)
             first = pipeline.scan(Envelope("Thank you for your help.", required_risks=("toxicity",)))
             second = pipeline.scan(Envelope("Thank you for your help.", required_risks=("toxicity",)))
-            if first["detectors"]["toxicity"]["status"] != "complete":
-                raise RuntimeError("Real smoke did not complete: " + json.dumps(first))
+            for label, result in (("first", first), ("cached", second)):
+                for risk in ("toxicity", "injection"):
+                    report = result["detectors"][risk]
+                    score = report["score"]
+                    if (
+                        report["status"] != "complete"
+                        or isinstance(score, bool) or not isinstance(score, (int, float))
+                        or not math.isfinite(score) or not 0 <= score <= 1
+                    ):
+                        raise RuntimeError(f"Real {risk} {label} smoke did not complete with a finite score: " + json.dumps(result))
+            if any(second["detectors"][risk]["cache_hits"] < 1 for risk in ("toxicity", "injection")):
+                raise RuntimeError("Real smoke did not reuse cached scores: " + json.dumps(second))
             print(json.dumps({"model_load_ms": load_ms, "first_request": first, "cached_request": second, "efficacy_evaluation": False}, indent=2))
         else:
             config = Config(mode=args.mode, max_windows=args.max_windows, seed=args.seed, deadline_seconds=args.deadline)
