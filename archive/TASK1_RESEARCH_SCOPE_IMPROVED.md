@@ -1,4 +1,4 @@
-> Supporting copy of [canonical Task 1 in SUBMISSION.md](SUBMISSION.md#task-1--research-scope-inline-edge-ai-guardrails). SUBMISSION.md is the authoritative submission.
+> Supporting copy of [canonical Task 1 in SUBMISSION.md](../SUBMISSION.md#task-1--research-scope-inline-edge-ai-guardrails). SUBMISSION.md is the authoritative submission.
 
 # Task 1 — Research Scope: Inline Edge AI Guardrails
 

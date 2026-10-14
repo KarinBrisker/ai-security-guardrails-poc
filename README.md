@@ -6,10 +6,7 @@ An offline CPU text-scanning POC with rule-based cues, real pretrained injection
 
 - [Source, setup, and demonstrations](poc/README.md)
 - [Design and trade-offs](poc/DESIGN.md)
-- [Specialist discussion](poc/DISCUSSION.md)
 - [Persisted execution checks](poc/validation/)
-- [Correctness and completeness audit](VERIFICATION.md)
-- [Best-practice and literature alignment](LITERATURE_ALIGNMENT.md)
 
 ## Quick start
 

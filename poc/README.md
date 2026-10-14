@@ -71,4 +71,4 @@ Full scanning is the default. The default eight-window per-detector cap is a dem
 
 Output includes `decision`, `reasons`, `findings`, per-risk `detectors`, coverage/window counts, mode, elapsed time, and explicit `security_validated: false` / `thresholds_validated: false`. Offline tests verify contracts and policy invariants. Real-model inference evidence is reported separately from mocked demonstrations.
 
-See [DESIGN.md](DESIGN.md) for boundaries and limitations, [DISCUSSION.md](DISCUSSION.md) for the research-team decisions, and the surrounding Task 1/Task 3 documents for the proposed quality evaluation.
+See [DESIGN.md](DESIGN.md) for boundaries and limitations and [SUBMISSION.md](../SUBMISSION.md) for the research scope and evaluation plan.

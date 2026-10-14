@@ -1,6 +1,6 @@
 # Verification record
 
-The current submission is [SUBMISSION.md](SUBMISSION.md). The revision checks below supersede initial model-execution, word-count, and source-policy limitations. Earlier checks are retained as historical evidence.
+The current submission is [SUBMISSION.md](../SUBMISSION.md). The revision checks below supersede initial model-execution, word-count, and source-policy limitations. Earlier checks are retained as historical evidence.
 
 Reviewed 2026-10-13 against the original `AI Security Researcher.pdf`, all three submission sections, scanner code, documented commands, and persisted execution checks. The security researcher and research manager performed independent reviews; the scientist reviewed the literature alignment.
 

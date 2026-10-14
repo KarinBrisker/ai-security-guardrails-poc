@@ -77,7 +77,7 @@ An input cap of 65,536 characters precedes rules/tokenization. A cooperative 30-
 
 The saved [validation artifacts](poc/validation/) distinguish offline behavioral tests, mock fixtures, real-model execution, and integration. Separate real runs cover TextDetox-only integration and joint injection/toxicity execution. Joint cases demonstrate ML injection blocking alongside rule evidence, cue-free injection scoring, contextual blocking without ML, cache reuse, and toxicity-scoped selective triage followed by complete scanning. The injection model also blocks a benign quoted attack and repeated benign questions; these observed false positives remain in the saved evidence. No joint low-latency ALLOW benefit is claimed. The TextDetox run is pinned to revision `8fe5526e9c6b69cf1a615104a2ad037fb266c670`.
 
-These checks establish execution and policy behavior; they do not estimate recall, population FPR, calibration, multilingual detection quality, or deployment performance. See [design details](poc/DESIGN.md) and [the specialist discussion](poc/DISCUSSION.md).
+These checks establish execution and policy behavior; they do not estimate recall, population FPR, calibration, multilingual detection quality, or deployment performance. See [design details](poc/DESIGN.md).
 
 # Task 3 — Evaluation Strategy and Trade-offs
 

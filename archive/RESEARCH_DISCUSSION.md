@@ -1,4 +1,4 @@
-> Historical research notes from the initial scope review. Word counts and model status below describe that revision. Read [SUBMISSION.md](SUBMISSION.md) for the current authoritative submission.
+> Historical research notes from the initial scope review. Word counts and model status below describe that revision. Read [SUBMISSION.md](../SUBMISSION.md) for the current authoritative submission.
 
 # Specialist discussion: Part 1 research scope
 

@@ -1,4 +1,4 @@
-> Supporting copy of [canonical Task 3 in SUBMISSION.md](SUBMISSION.md#task-3--evaluation-strategy-and-trade-offs). SUBMISSION.md is the authoritative submission.
+> Supporting copy of [canonical Task 3 in SUBMISSION.md](../SUBMISSION.md#task-3--evaluation-strategy-and-trade-offs). SUBMISSION.md is the authoritative submission.
 
 # Task 3 — Evaluation Strategy and Trade-offs
 
