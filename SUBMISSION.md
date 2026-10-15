@@ -2,6 +2,14 @@
 
 Research scope, implemented POC, and proposed evaluation strategy. Quality experiments and mobile validation are not claimed.
 
+## TL;DR
+
+- **Approach:** Offline CPU guardrail that scans inputs, tool arguments/results, and outputs and returns ALLOW, BLOCK, or ESCALATE with evidence and per-detector coverage.
+- **Two layers:** Bounded rules for injection, role-spoofing, exfiltration, and secret cues, plus pretrained ML classifiers (DeBERTa injection, TextDetox multilingual toxicity).
+- **Fail-safe policy:** Missing models, unsupported inputs, timeouts, and skipped windows cannot justify ALLOW.
+- **Results:** 47 tests pass with real models; validation scripts pass (10 mock fixtures, 6 TextDetox integration cases, 15 joint/scoped cases). No joint low-latency ALLOW benefit is claimed.
+- **Main limitation:** These are execution checks only. Detection quality, calibration, multilingual (Hebrew/Arabic) quality, and mobile feasibility remain unvalidated.
+
 # Task 1 — Research Scope: Inline Edge AI Guardrails
 
 ## Scope and assumptions

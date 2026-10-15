@@ -8,7 +8,7 @@ An offline CPU text-scanning POC with rule-based cues, real pretrained injection
 - [Design and trade-offs](poc/DESIGN.md)
 - [Persisted execution checks](poc/validation/)
 
-Validated on 14 October 2026 against code revision `dd94eba`: **47 tests passed**, the offline smoke check completed with both real classifiers and cache reuse, and both validation scripts passed (10 mock fixtures, 6 TextDetox integration cases, 15 joint/scoped cases). Fresh outputs are in [poc/validation](poc/validation/). These are execution checks; detection quality remains unvalidated.
+Validated on 14 October 2026 against code revision `dd94eba`: **47 tests passed** (with `--extra ml` and models provisioned; without models it is 40 passed, 7 skipped), the offline smoke check completed with both real classifiers and cache reuse, and both validation scripts passed (10 mock fixtures, 6 TextDetox integration cases, 15 joint/scoped cases). Fresh outputs are in [poc/validation](poc/validation/). These are execution checks; detection quality remains unvalidated.
 
 ## Quick start
 
@@ -20,6 +20,8 @@ uv sync --extra test
 uv run edge-guard demo
 uv run pytest
 ```
+
+Note: the default `edge-guard demo` uses mock models, so most cases show ESCALATE by design (mocks can't ALLOW). The mock outcome appears as `simulated_decision`. Install the ML extra with real models for real decisions.
 
 The demo uses explicitly labelled fixture-only mocks. To run both real CPU classifiers:
 
