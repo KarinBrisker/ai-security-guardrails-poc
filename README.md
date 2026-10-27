@@ -32,3 +32,7 @@ HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 uv run edge-guard smoke --models-dir .mo
 ```
 
 TextDetox and ungated DeBERTa are the CPU inference path. Optional Prompt Guard remains unexecuted. The injection model's card lists English/German; a non-Latin-letter gate leaves other scripts unassessed but cannot identify unsupported Latin-script languages. Required missing/unassessed checks prevent ALLOW unless another check blocks. Thresholds and runtime caps are demonstration controls. Refresh the documented validation scripts after provisioning; execution checks do not establish detection effectiveness or deployment readiness.
+
+## Technical walkthrough
+
+[View the presentation (PDF, 11 slides)](docs/edge-ai-guardrails-technical-walkthrough.pdf). This export contains slide content only, without presenter notes. It is a supplementary visual walkthrough; [SUBMISSION.md](SUBMISSION.md) remains the authoritative submission.
