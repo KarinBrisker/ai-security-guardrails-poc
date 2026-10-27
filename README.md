@@ -35,4 +35,4 @@ TextDetox and ungated DeBERTa are the CPU inference path. Optional Prompt Guard 
 
 ## Technical walkthrough
 
-[View the presentation (PDF, 11 slides)](docs/edge-ai-guardrails-technical-walkthrough.pdf). This export contains slide content only, without presenter notes. It is a supplementary visual walkthrough; [SUBMISSION.md](SUBMISSION.md) remains the authoritative submission.
+[Edge AI Guardrails — Technical Walkthrough](docs/edge-ai-guardrails-technical-walkthrough.pdf)
